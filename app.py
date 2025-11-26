@@ -6,9 +6,9 @@ from slack_bolt.adapter.flask import SlackRequestHandler
 
 # RAG Libraries
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
-from langchain_community.vectorstores import Pinecone as LCPinecone
+# from langchain_community.vectorstores import Pinecone as LCPinecone
 from pinecone import Pinecone
-
+from langchain_pinecone import PineconeVectorStore # <-- ADD THIS
 # Load environment variables (API keys)
 load_dotenv()
 
@@ -33,7 +33,7 @@ try:
     )
     
     # 3. Connect to the existing Pinecone index
-    vectorstore = LCPinecone.from_existing_index(
+    vectorstore = PineconeVectorStore.from_existing_index(
         index_name=INDEX_NAME, 
         embedding=embeddings
     )
