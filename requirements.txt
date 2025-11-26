@@ -8,4 +8,4 @@ slack_bolt  # Slack framework
 flask       # Web server integration for hosting
 gunicorn    # Production-ready WSGI server (required for Render)
 sentence-transformers
-langchain-pinecone  <-- CRITICAL: ENSURE THIS IS PRESENT
+langchain-pinecone  #<-- CRITICAL: ENSURE THIS IS PRESENT
