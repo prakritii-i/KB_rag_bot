@@ -5,8 +5,10 @@ from slack_bolt import App
 from slack_bolt.adapter.flask import SlackRequestHandler
 
 # RAG Libraries
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI # <-- KEEP for LLM
+# from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 # from langchain_community.vectorstores import Pinecone as LCPinecone
+from langchain_community.embeddings import HuggingFaceEmbeddings # <-- ADD THIS
 from pinecone import Pinecone
 from langchain_pinecone import PineconeVectorStore # <-- ADD THIS
 # Load environment variables (API keys)
@@ -14,7 +16,8 @@ load_dotenv()
 
 # --- Configuration ---
 INDEX_NAME = "slack-kb-index" # Must match the name used in ingest.py
-EMBEDDING_MODEL = "models/embedding-001" # Gemini embedding model
+# EMBEDDING_MODEL = "models/embedding-001" # Gemini embedding model
+EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2" # <-- NEW, must match ingest.py
 LLM_MODEL = "gemini-1.5-flash" # The reliable, free LLM for reasoning
 
 # --- Initialize RAG Components ---
@@ -22,14 +25,15 @@ try:
     # 1. Initialize Pinecone client
     pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
     
-    # 2. Initialize Gemini Embeddings and LLM
-    embeddings = GoogleGenerativeAIEmbeddings(
-        model=EMBEDDING_MODEL, 
-        google_api_key=os.getenv("GOOGLE_API_KEY")
+    # 2. Initialize HuggingFace Embeddings and Gemini LLM
+    embeddings = HuggingFaceEmbeddings(
+        model_name=EMBEDDING_MODEL_NAME,
+        model_kwargs={'device': 'cpu'},
+        encode_kwargs={'normalize_embeddings': True}
     )
     llm = ChatGoogleGenerativeAI(
         model=LLM_MODEL, 
-        google_api_key=os.getenv("GOOGLE_API_KEY")
+        google_api_key=os.getenv("GOOGLE_API_KEY") # <-- STILL REQUIRED for the LLM
     )
     
     # 3. Connect to the existing Pinecone index
