@@ -1,6 +1,9 @@
-# requirements.txt
-python-dotenv  # For managing API keys securely
-langchain-google-genai  # For Gemini LLM and Embeddings
-langchain-community  # For document loaders
-pinecone-client  # For the vector database
-pypdf  # To read PDF files
+# requirements.txt (make sure these are installed)
+python-dotenv
+langchain-google-genai
+langchain-community
+pinecone-client
+pypdf
+slack_bolt  # Slack framework
+flask       # Web server integration for hosting
+gunicorn    # Production-ready WSGI server (required for Render)
