@@ -2,7 +2,7 @@
 python-dotenv
 langchain-google-genai
 langchain-community
-pinecone-client
+pinecone
 pypdf
 slack_bolt  # Slack framework
 flask       # Web server integration for hosting
